@@ -4,6 +4,9 @@ var JSFTP = require('jsftp');
 AWS.config.loadFromPath('./config.json');
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
+const l_url='http://localhost:3000/';
+const s_url='http://seller.haappyapp.com:8080/';
+const api_url=s_url;
 exports.handler = function (event, context) {
     var eventKey = event.Records[0].s3.object.key;
     console.log(eventKey);
@@ -16,13 +19,13 @@ exports.handler = function (event, context) {
     var stream_name = hyphenBreaker[3] + '-' + hyphenBreaker[4];
     console.log('applnname : ' + appln_name);
     console.log('stream_name : ' + stream_name);
-
+ 
     var bucketParams = {
         Bucket: 'haappyapp-j/myFiles',
         Key: mainKey
     };
-
-    unirest.get('http://localhost:3000/journal/settings/' + appln_name + '/' + stream_name)
+    
+    unirest.get(api_url+'journal/settings/' + appln_name + '/' + stream_name)
         .headers({
             'Accept': 'application/json',
             'Content-Type': 'application/json'
