@@ -1,0 +1,16 @@
+{
+  "name": "s3-ftp-video-lambda",
+  "version": "1.0.0",
+  "description": "AWS S3 to FTP lambda function",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ram K",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.120.0",
+    "jsftp": "^2.0.0",
+    "unirest": "^0.5.1"
+  }
+}

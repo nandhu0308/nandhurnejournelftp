@@ -1,0 +1,55 @@
+var AWS = require('aws-sdk');
+var unirest = require('unirest');
+var JSFTP = require('jsftp');
+AWS.config.loadFromPath('./config.json');
+var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+
+exports.handler = function (event, context) {
+    var eventKey = event.Records[0].s3.object.key;
+    console.log(eventKey);
+    //var key = 'ka-mob-prajaa-pj-manju1_2017-09-21-11.53.14.458-UTC_0.mp4'
+    var mainKey = eventKey.split('/')[1];
+    console.log(mainKey);
+    var underscoreBreaker = mainKey.split('_');
+    var hyphenBreaker = underscoreBreaker[0].split('-');
+    var appln_name = hyphenBreaker[0] + '-' + hyphenBreaker[1] + '-' + hyphenBreaker[2];
+    var stream_name = hyphenBreaker[3] + '-' + hyphenBreaker[4];
+    console.log('applnname : ' + appln_name);
+    console.log('stream_name : ' + stream_name);
+
+    var bucketParams = {
+        Bucket: 'haappyapp-j/myFiles',
+        Key: mainKey
+    };
+
+    unirest.get('http://localhost:3000/journal/settings/' + appln_name + '/' + stream_name)
+        .headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        })
+        .end(function (response) {
+            var journalSettings = response.body;
+
+            var ftpClient = new JSFTP({
+                host: journalSettings.ftp_host,
+                port: journalSettings.ftp_port,
+                user: journalSettings.ftp_uname,
+                pass: journalSettings.ftp_passwd
+            });
+
+            s3.getObject(bucketParams, function (err, data) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log(data);
+                    ftpClient.put(data.Body, './' + key, function (err1) {
+                        if (err1) {
+                            console.log(err1);
+                        } else {
+                            console.log('file saved'); cls
+                        }
+                    });
+                }
+            });
+        });
+};
