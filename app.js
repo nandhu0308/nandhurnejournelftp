@@ -9,6 +9,7 @@ var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 // const api_url=s_url;
 exports.handler = function (event, context) {
     var eventKey = event.Records[0].s3.object.key;
+    console.log(event.Records);
     console.log(eventKey);
     //var key = 'ka-mob-prajaa-pj-manju1_2017-09-21-11.53.14.458-UTC_0.mp4'
     var mainKey = eventKey.split('/')[1];
