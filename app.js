@@ -7,14 +7,19 @@ var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 // const l_url='http://localhost:3000/';
 // const s_url='http://seller.haappyapp.com:8080/';
 // const api_url=s_url;
-exports.handler = function (event, context) {
-    var eventKey = event.Records[0].s3.object.key;
-    console.log(event.Records);
+exports.handler = function (event, context,callback) {
+
+    // This example code only throws error. 
+    var error = new Error("something is wrong");
+    callback(error);
+   
+    var eventKey= event.Records[0].s3.object.key;
     console.log(eventKey);
-    //var key = 'ka-mob-prajaa-pj-manju1_2017-09-21-11.53.14.458-UTC_0.mp4'
+     //var eventKey  = 'ka-mob-prajaa-pj-manju1_2017-09-21-14.18.08.889-UTC_0.mp4'
     var mainKey = eventKey.split('/')[1];
     console.log(mainKey);
     var underscoreBreaker = mainKey.split('_');
+
     var hyphenBreaker = underscoreBreaker[0].split('-');
     var appln_name = hyphenBreaker[0] + '-' + hyphenBreaker[1] + '-' + hyphenBreaker[2];
     var stream_name = hyphenBreaker[3] + '-' + hyphenBreaker[4];
