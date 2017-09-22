@@ -46,7 +46,7 @@ exports.handler = function (event, context) {
                     console.log(err);
                 } else {
                     console.log(data);
-                    ftpClient.put(data.Body, './' + key, function (err1) {
+                    ftpClient.put(data.Body, './' + mainKey, function (err1) {
                         if (err1) {
                             console.log(err1);
                         } else {
