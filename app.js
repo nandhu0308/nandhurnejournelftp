@@ -22,7 +22,7 @@ exports.handler = function (event, context, callback) {
 
     var hyphenBreaker = underscoreBreaker[0].split('-');
     var appln_name = hyphenBreaker[0] + '-' + hyphenBreaker[1] + '-' + hyphenBreaker[2];
-    var stream_name = hyphenBreaker[3] + '-' + hyphenBreaker[4];
+    var stream_name = underscoreBreaker[0];
     console.log('applnname : ' + appln_name);
     console.log('stream_name : ' + stream_name);
 
@@ -38,6 +38,7 @@ exports.handler = function (event, context, callback) {
         })
         .end(function (response) {
             var journalSettings = response.body;
+            console.log(journalSettings);
 
             var ftpClient = new JSFTP({
                 host: journalSettings.ftp_host,
@@ -55,7 +56,49 @@ exports.handler = function (event, context, callback) {
                         if (err1) {
                             console.log(err1);
                         } else {
-                            console.log('file saved'); cls
+                            console.log('file saved');
+                            unirest.post("http://seller.haappyapp.com:8080/journal/log/activity")
+                                .headers({
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                })
+                                .send({
+                                    journal_setting_id: journalSettings.journal_setting_id,
+                                    language_id: journalSettings.language_id,
+                                    appln_name: journalSettings.appln_name,
+                                    host_url: journalSettings.host_url,
+                                    host_port: journalSettings.host_port,
+                                    stream_name: journalSettings.stream_name,
+                                    spwd: journalSettings.spwd,
+                                    rep_mac_addr: journalSettings.rep_mac_addr,
+                                    output_url_hls: journalSettings.output_url_hls,
+                                    output_url_rtsp: journalSettings.output_url_rtsp,
+                                    is_record: journalSettings.is_record,
+                                    is_upload: journalSettings.is_upload,
+                                    is_active: journalSettings.is_active,
+                                    created_by: journalSettings.created_by,
+                                    updated_by: journalSettings.updated_by,
+                                    created_time: journalSettings.created_time,
+                                    updated_time: journalSettings.updated_time,
+                                    ftp_host: journalSettings.ftp_host,
+                                    ftp_port: journalSettings.ftp_port,
+                                    ftp_uname: journalSettings.ftp_uname,
+                                    ftp_passwd: journalSettings.ftp_passwd,
+                                    ftp_path: journalSettings.ftp_path,
+                                    bucket_path: 'https://s3.ap-south-1.amazonaws.com/haappyapp-j/' + eventKey
+                                })
+                                .end(function (logResponse) {
+                                    var logPost = logResponse.body;
+                                    if (logPost.id > 0) {
+                                        s3.deleteObject(bucketParams, function(deleteErr, deleteData){
+                                            if(deleteErr){
+                                                console.log(deleteErr);
+                                            } else {
+                                                console.log(deleteData);
+                                            }
+                                        });
+                                    }
+                                });
                         }
                     });
                 }
