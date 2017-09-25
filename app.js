@@ -90,11 +90,24 @@ exports.handler = function (event, context, callback) {
                                 .end(function (logResponse) {
                                     var logPost = logResponse.body;
                                     if (logPost.id > 0) {
-                                        s3.deleteObject(bucketParams, function(deleteErr, deleteData){
-                                            if(deleteErr){
-                                                console.log(deleteErr);
+                                        // s3.deleteObject(bucketParams, function(deleteErr, deleteData){
+                                        //     if(deleteErr){
+                                        //         console.log(deleteErr);
+                                        //     } else {
+                                        //         console.log(deleteData);
+                                        //     }
+                                        // });
+                                        var ftpClient2 = new JSFTP({
+                                            host: journalSettings.ha_ftp_host,
+                                            port: journalSettings.ha_ftp_port,
+                                            user: journalSettings.ha_ftp_uname,
+                                            pass: journalSettings.ha_ftp_passwd 
+                                        });
+                                        ftpClient2.raw('dele', '', function(err, rdata){
+                                            if(err){
+                                                console.log(err);
                                             } else {
-                                                console.log(deleteData);
+                                                console.log(rdata);
                                             }
                                         });
                                     }
