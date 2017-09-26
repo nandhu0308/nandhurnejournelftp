@@ -2,17 +2,16 @@ var AWS = require('aws-sdk');
 var unirest = require('unirest');
 var JSFTP = require('jsftp');
 AWS.config.loadFromPath('./config.json');
-var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+var s3 = new AWS.S3({ apiVersion: 'latest',httpOptions:{timeout:3000} });
+//var s3 = new AWS.S3({ apiVersion: '2006-03-01',httpOptions:{timeout:3000} });
 
 // const l_url='http://localhost:3000/';
 // const s_url='http://seller.haappyapp.com:8080/';
 // const api_url=s_url;
 exports.handler = function (event, context,callback) {
-
     // This example code only throws error. 
     var error = new Error("something is wrong");
     callback(error);
-   
     var eventKey= event.Records[0].s3.object.key;
     console.log(eventKey);
      //var eventKey  = 'ka-mob-prajaa-pj-manju1_2017-09-21-14.18.08.889-UTC_0.mp4'
