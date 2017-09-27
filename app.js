@@ -89,7 +89,7 @@ exports.handler = function (event, context, callback) {
                                 })
                                 .end(function (logResponse) {
                                     var logPost = logResponse.body;
-                                    if (logPost.id > 0) {
+                                    
                                         // s3.deleteObject(bucketParams, function(deleteErr, deleteData){
                                         //     if(deleteErr){
                                         //         console.log(deleteErr);
@@ -117,7 +117,7 @@ exports.handler = function (event, context, callback) {
                                                 });
                                             }
                                         });
-                                    }
+                                    
                                 });
                         }
                     });
