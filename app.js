@@ -12,13 +12,8 @@ exports.handler = function (event, context, callback) {
     // This example code only throws error. 
     var error = new Error("something is wrong");
     callback(error);
-<<<<<<< .mine
     var eventKey= event.Records[0].s3.object.key;
 
-=======
-
-    var eventKey = event.Records[0].s3.object.key;
->>>>>>> .theirs
     console.log(eventKey);
     //var eventKey  = 'ka-mob-prajaa-pj-manju1_2017-09-21-14.18.08.889-UTC_0.mp4'
     var mainKey = eventKey.split('/')[1];
