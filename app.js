@@ -103,12 +103,12 @@ exports.handler = function (event, context, callback) {
                                             user: journalSettings.ha_ftp_uname,
                                             pass: journalSettings.ha_ftp_passwd 
                                         });
-                                        ftpClient2.raw('dele', journalSettings.ha_ftp_path+'/'+mainKey, function(err, rdata){
+                                        ftpClient2.raw('dele', '/'+journalSettings.ha_ftp_path+'/'+mainKey, function(err, rdata){
                                             if(err){
                                                 console.log(err);
                                             } else {
                                                 console.log(rdata);
-                                                ftpClient2.raw('dele', journalSettings.ha_ftp_path + '/' + mainKey+'.upload', function (err, rdata) {
+                                                ftpClient2.raw('dele', '/'+journalSettings.ha_ftp_path + '/' + mainKey+'.upload', function (err, rdata) {
                                                     if (err) {
                                                         console.log(err);
                                                     } else {
